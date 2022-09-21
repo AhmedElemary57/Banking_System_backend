@@ -61,6 +61,33 @@ public class TransactionServices {
 
     }
 
+    public static Transaction[] getUserTransactions(String email) {
+        MongoDatabase database = DatabaseConnection.connectToDB("BankingSystem");
+        ArrayList<Transaction> transactions=new ArrayList<>();
+        for (Document document : database.getCollection("Transactions").find(new Document("from",email)).sort(new Document("date", -1))) {
+            System.out.println(document);
+            Transaction transaction=new Transaction();
+            transaction.set_id(document.get("_id").toString());
+            transaction.setAmount(Integer.parseInt(document.get("amount").toString()));
+            transaction.setDate(document.get("date").toString());
+            transaction.setTo(document.get("to").toString());
+            transaction.setFrom(document.get("from").toString());
+            transactions.add(transaction);
+        }
+        for (Document document : database.getCollection("Transactions").find(new Document("to",email)).sort(new Document("date", -1))) {
+            System.out.println(document);
+            Transaction transaction=new Transaction();
+            transaction.set_id(document.get("_id").toString());
+            transaction.setAmount(Integer.parseInt(document.get("amount").toString()));
+            transaction.setDate(document.get("date").toString());
+            transaction.setTo(document.get("to").toString());
+            transaction.setFrom(document.get("from").toString());
+            transactions.add(transaction);
+        }
+        Transaction[] transactionsArray=new Transaction[transactions.size()];
+        transactionsArray=transactions.toArray(transactionsArray);
+        return transactionsArray;
+    }
 
 
 }

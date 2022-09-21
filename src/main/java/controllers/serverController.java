@@ -36,6 +36,12 @@ public class serverController {
         return new ResponseEntity<>(UserServices.getAllUsers(), HttpStatus.OK);
     }
 
+    @GetMapping("/getUser")
+    public ResponseEntity<Transaction[]> getUserInfo(@RequestParam String userEmail) {
+        System.out.println("get user info  " + userEmail);
+        return new ResponseEntity<>(TransactionServices.getUserTransactions(userEmail), HttpStatus.OK);
+    }
+
 
 }
   
